@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    ports:
+      - '${DB_PORT:-9931}:5432'
+    container_name: winterdev
+    environment:
+      POSTGRES_USER: ${DB_USER:-docker}
+      POSTGRES_DB: ${DB_NAME:-winterdev}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-docker}
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
