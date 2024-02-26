@@ -5,7 +5,7 @@ import { handlersPost } from "./post";
 
 const avaliableRoutes = [...handlersGet, ...handlersPost]
 
-enum ValidMethods {
+export enum ValidMethods {
   POST = 'post',
   GET = 'get',
 }

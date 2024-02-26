@@ -4,7 +4,8 @@
   "description": "a project to learn about upload of files",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/http/server.ts"
+    "dev": "tsx watch --env-file .env src/http/server.ts",
+    "test": "node --loader tsx --test --watch ./tests/**/*.test.ts"
   },
   "author": "Juliano Stroschon",
   "license": "ISC",

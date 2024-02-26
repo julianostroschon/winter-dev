@@ -9,7 +9,7 @@ interface FileUploadedInfo {
   fileId: string
 }
 
-async function handler (request: FastifyRequest<RouteGenericInterface>): Promise<FileUploadedInfo> {
+async function handler (request: Partial<FastifyRequest<RouteGenericInterface>>): Promise<FileUploadedInfo> {
   const { fileKey, contentType, name } = getMetaInfo(request)
   const signedUrl = await signUrl(fileKey, contentType)
 

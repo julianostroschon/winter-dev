@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 const REGEX = /\w+\/[-+.\w]+/
 
-export function getMetaInfo(request: FastifyRequest<RouteGenericInterface>): { fileKey: string, contentType: string, name: string } {
+export function getMetaInfo(request: Partial<FastifyRequest<RouteGenericInterface>>): { fileKey: string, contentType: string, name: string } {
   if (!request.body) {
     throw new Error(`Missing body in request`)
   }
