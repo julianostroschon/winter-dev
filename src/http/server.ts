@@ -1,25 +1,14 @@
 import fastify from "fastify";
 
-import { prisma } from '../infra/prisma'
-import { signUrl } from "../support/signUrl";
-import { getMetaInfo } from "../support/meta";
 import { env } from "../env";
+
+import { handlers } from "./handlers";
 
 const app = fastify();
 
-app.post("/uploads", async (request, reply) => {
-  const { fileKey, contentType, name } = getMetaInfo(request)
-  const signedUrl = await signUrl(fileKey, contentType)
-
-  const file = await prisma.file.create({
-    data: {
-      name,
-      key: fileKey,
-      contentType
-    }
-  })
-
-  return { signedUrl, fileId: file.id }
+handlers.forEach(({ route, handler, method }) => {
+  const newMethod = method.toLocaleLowerCase()
+  app[newMethod](route, handler)
 });
 
 const port = Number(env.API_PORT)
