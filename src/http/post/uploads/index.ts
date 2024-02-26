@@ -26,6 +26,6 @@ async function handler (request: FastifyRequest<RouteGenericInterface>): Promise
 
 export const uploads = {
   route: '/uploads',
-  method: 'POST',
+  method: 'post',
   handler
 }

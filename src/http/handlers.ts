@@ -4,8 +4,8 @@ import { handlersGet } from "./get";
 import { handlersPost } from "./post";
 
 enum ValidMethods {
-  POST = 'POST',
-  GET = 'GET',
+  POST = 'post',
+  GET = 'get',
 }
 
 const shape = {

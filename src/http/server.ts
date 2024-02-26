@@ -7,8 +7,7 @@ import { handlers } from "./handlers";
 const app = fastify();
 
 handlers.forEach(({ route, handler, method }) => {
-  const newMethod = method.toLocaleLowerCase()
-  app[newMethod](route, handler)
+  app[method](route, handler)
 });
 
 const port = Number(env.API_PORT)
