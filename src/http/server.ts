@@ -2,13 +2,10 @@ import fastify from "fastify";
 
 import { env } from "../env";
 
-import { handlers } from "./handlers";
+import { constructRoutes } from "./handlers";
 
 const app = fastify();
-
-handlers.forEach(({ route, handler, method }) => {
-  app[method](route, handler)
-});
+constructRoutes(app);
 
 const port = Number(env.API_PORT)
 

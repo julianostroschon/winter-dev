@@ -1,5 +1,5 @@
 export const ping = {
-    handler: () => 'pong!',
-    route: '/.ping',
-    method: 'get',
+  handler: (): string => 'pong!',
+  path: '/.ping',
+  method: 'get',
 }

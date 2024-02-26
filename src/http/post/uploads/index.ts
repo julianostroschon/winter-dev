@@ -1,4 +1,5 @@
 import { FastifyRequest, RouteGenericInterface } from "fastify"
+
 import { prisma } from "../../../infra/prisma"
 import { getMetaInfo } from "../../../support/meta"
 import { signUrl } from "../../../support/signUrl"
@@ -8,16 +9,15 @@ interface FileUploadedInfo {
   fileId: string
 }
 
-
 async function handler (request: FastifyRequest<RouteGenericInterface>): Promise<FileUploadedInfo> {
   const { fileKey, contentType, name } = getMetaInfo(request)
   const signedUrl = await signUrl(fileKey, contentType)
 
   const file = await prisma.file.create({
     data: {
-      name,
       key: fileKey,
-      contentType
+      contentType,
+      name,
     }
   })
 
@@ -25,7 +25,7 @@ async function handler (request: FastifyRequest<RouteGenericInterface>): Promise
 }
 
 export const uploads = {
-  route: '/uploads',
+  path: '/uploads',
   method: 'post',
   handler
 }
