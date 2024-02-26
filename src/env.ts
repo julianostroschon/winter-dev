@@ -8,6 +8,7 @@ const envSchema = z.object({
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
   DB_PORT: z.string(),
+  API_PORT: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

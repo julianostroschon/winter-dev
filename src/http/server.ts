@@ -1,34 +1,17 @@
 import fastify from "fastify";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { z } from 'zod'
-import { randomUUID } from 'node:crypto'
-import { PrismaClient } from '@prisma/client'
 
-import { r2 } from "../lib/cloudflare";
+import { prisma } from '../infra/prisma'
+import { signUrl } from "../support/signUrl";
+import { getMetaInfo } from "../support/meta";
+import { env } from "../env";
 
 const app = fastify();
-const prisma = new PrismaClient();
 
 app.post("/uploads", async (request, reply) => {
-  const uploadBodySchema = z.object({
-    name: z.string().min(1),
-    contentType: z.string().regex(/\w+\/[-+.\w]+/),
-  })
+  const { fileKey, contentType, name } = getMetaInfo(request)
+  const signedUrl = await signUrl(fileKey, contentType)
 
-  const { name, contentType } = uploadBodySchema.parse(request.body)
-  const fileKey = randomUUID().concat('-').concat(name)
-  const signedUrl = await getSignedUrl(
-    r2, 
-    new PutObjectCommand({
-      ContentType: contentType,
-      Bucket: 'winter-dev',
-      Key: fileKey,
-    }),
-    { expiresIn: 600 }
-  )
-
-  await prisma.file.create({
+  const file = await prisma.file.create({
     data: {
       name,
       key: fileKey,
@@ -36,9 +19,11 @@ app.post("/uploads", async (request, reply) => {
     }
   })
 
-  return signedUrl
+  return { signedUrl, fileId: file.id }
 });
 
-app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
-  console.log(`🚀 Server listening on port ${3333}`);
+const port = Number(env.API_PORT)
+
+app.listen({ port, host: '0.0.0.0' }).then(() => {
+  console.log(`🚀 Server listening on port ${port}`);
 });
